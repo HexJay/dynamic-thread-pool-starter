@@ -34,5 +34,7 @@ public class ThreadPoolMetrics {
     /**
      * EWMA 平滑后的平均任务执行时间（ms）
      */
-    private double avgTaskTimeMillis;
+    private double ewmaTaskTime;
+    /** EWMA平滑后的平均任务等待时间 (ms) */
+    private double ewmaQueueWait;
 }

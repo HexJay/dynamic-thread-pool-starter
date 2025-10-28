@@ -13,31 +13,34 @@ import java.time.LocalDateTime;
 public class SystemMetrics {
     /** CPU 总体使用率（0~1） */
     private double cpuUsage;
-
     /** CPU 用户态使用率（0~1） */
     private double cpuUserUsage;
-
     /** CPU 系统态使用率（0~1） */
     private double cpuSystemUsage;
-
+    /** CPU IO 等待比例（0~1） */
+    private double cpuIoWaitUsage;
     /** CPU 空闲率（0~1） */
-    private double cpuIdle;
-
+    private double cpuIdleUsage;
     /** CPU 逻辑核心数 */
     private int cpuLogicalCount;
-
-    /** 系统平均负载（load average） */
+    /** 系统平均负载 */
     private double systemLoadAverage;
-
     /** 系统总内存（字节） */
     private long memoryTotal;
-
     /** 可用内存（字节） */
     private long memoryAvailable;
-
     /** 内存使用率（0~1） */
     private double memoryUsedPercent;
-
+    /** 交换区总大小（字节） */
+    private long swapTotal;
+    /** 已使用交换区（字节） */
+    private long swapUsed;
+    /** 磁盘每秒读写字节 */
+    private long diskReadBytesPerSec;
+    private long diskWriteBytesPerSec;
+    /** 网络每秒收发字节 */
+    private long netRecvBytesPerSec;
+    private long netSentBytesPerSec;
     /** 采样时间 */
     private LocalDateTime timestamp;
 }

@@ -2,8 +2,6 @@ package com.jovia.dynamic.threadpool.core.model.entity;
 
 import lombok.*;
 
-import java.util.concurrent.RejectedExecutionHandler;
-
 /**
  * 线程池配置实体对象
  *
@@ -56,24 +54,25 @@ public class ThreadPoolConfig {
     /**
      * 拒绝策略
      */
-    private RejectedExecutionHandler handler;
+    private String handler;
 
     // 新增：自适应模式
-    private int adjustMode; // AUTO 0 / MANUAL 1 
+    private String adjustMode; // AUTO 0 / MANUAL 1 
 
     private long lastUpdateTime;
 
 
     public enum Mode {
 
-        AUTO(0),
-        MANUAL(1);
+        AUTO("auto",0),
+        MANUAL("manual",1);
 
-        
+        public final String desc;
         public final int code;
 
-        Mode(int i) {
-            this.code = i;
+        Mode(String desc, int  code) {
+            this.desc = desc;
+            this.code = code;
         }
     }
 }

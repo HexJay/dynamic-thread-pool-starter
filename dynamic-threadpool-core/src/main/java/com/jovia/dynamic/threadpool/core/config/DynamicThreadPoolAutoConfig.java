@@ -1,7 +1,7 @@
 package com.jovia.dynamic.threadpool.core.config;
 
 import com.alibaba.fastjson.JSON;
-import com.jovia.dynamic.threadpool.core.MonitoringThreadPoolExecutor;
+import com.jovia.dynamic.threadpool.core.domain.pool.DynamicThreadPoolExecutor;
 import com.jovia.dynamic.threadpool.core.service.DynamicThreadPoolService;
 import com.jovia.dynamic.threadpool.core.service.IDynamicThreadPoolService;
 import com.jovia.dynamic.threadpool.core.trigger.job.AdaptiveAdjusterJob;
@@ -16,7 +16,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -43,7 +42,7 @@ public class DynamicThreadPoolAutoConfig {
 
     @Bean
     @ConditionalOnBean(ThreadPoolExecutor.class)
-    public IDynamicThreadPoolService dynamicThreadPoolService(Map<String, MonitoringThreadPoolExecutor> threadPoolExecutorMap) {
+    public IDynamicThreadPoolService dynamicThreadPoolService(Map<String, DynamicThreadPoolExecutor> threadPoolExecutorMap) {
         String appName = applicationContext.getEnvironment().getProperty("spring.application.name");
         if (StringUtils.isBlank(appName)) {
             throw new IllegalStateException("[DynamicThreadPool] 启动失败：未配置 spring.application.name，请在 application.yml 中配置。");
