@@ -31,12 +31,6 @@ public class SystemMetrics {
     private long memoryAvailable;
     /** 内存使用率（0~1） */
     private double memoryUsedPercent;
-    /** 磁盘每秒读写字节 */
-    private long diskReadBytesPerSec;
-    private long diskWriteBytesPerSec;
-    /** 网络每秒收发字节 */
-    private long netRecvBytesPerSec;
-    private long netSentBytesPerSec;
     /** 采样时间 */
     private LocalDateTime timestamp;
 }

@@ -20,6 +20,4 @@ public interface IDynamicThreadPoolService {
     void updateThreadPoolConfig(ThreadPoolConfig threadPoolConfig);
 
     ThreadPoolMetrics collectMetrics(String poolName);
-    
-    void adjustIfNeeded();
 }

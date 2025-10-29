@@ -118,21 +118,4 @@ public class DynamicThreadPoolService implements IDynamicThreadPoolService {
         
         return threadPoolMetrics;
     }
-
-    @Override
-    public void adjustIfNeeded() {
-        Set<String> threadPoolNames = threadPoolContextMap.keySet();
-        for (String poolName : threadPoolNames) {
-            ThreadPoolContext context = threadPoolContextMap.get(poolName);
-            ThreadPoolConfig config = context.getThreadPoolConfig();
-            
-            if (config == null || !Objects.equals(config.getAdjustMode(), AdjustMode.MANUAL.desc)) {
-                continue;
-            }
-            
-            
-        }
-    }
-    
-    
 }

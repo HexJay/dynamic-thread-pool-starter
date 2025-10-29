@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jovia.dynamic.threadpool.core.domain.pool.DynamicThreadPoolExecutor;
 import com.jovia.dynamic.threadpool.core.service.DynamicThreadPoolService;
 import com.jovia.dynamic.threadpool.core.service.IDynamicThreadPoolService;
-import com.jovia.dynamic.threadpool.core.trigger.job.AdaptiveAdjusterJob;
+import com.jovia.dynamic.threadpool.core.utils.SystemMetricsMonitor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,7 @@ public class DynamicThreadPoolAutoConfig {
 
     public DynamicThreadPoolAutoConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+        SystemMetricsMonitor.start(1000);
     }
 
     @Bean
@@ -51,8 +52,4 @@ public class DynamicThreadPoolAutoConfig {
         return new DynamicThreadPoolService(appName, threadPoolExecutorMap);
     }
     
-    @Bean
-    public AdaptiveAdjusterJob adaptiveAdjusterJob(IDynamicThreadPoolService dynamicThreadPoolService) {
-        return new AdaptiveAdjusterJob(dynamicThreadPoolService);
-    }
 }

@@ -7,6 +7,7 @@ import com.jovia.dynamic.threadpool.core.model.entity.ThreadPoolMetrics;
 import com.jovia.dynamic.threadpool.core.model.vo.AdjustMode;
 import com.jovia.dynamic.threadpool.core.model.vo.AutoAdjustConfig;
 import com.jovia.dynamic.threadpool.core.utils.SystemMetricsCollector;
+import com.jovia.dynamic.threadpool.core.utils.SystemMetricsMonitor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -130,7 +131,11 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
             // 收集系统指标（异步或按需）
             SystemMetrics systemMetrics = null;
             if (autoAdjustConfig.isUseSystemMetrics()) {
-                systemMetrics = SystemMetricsCollector.collect(200);
+                systemMetrics = SystemMetricsMonitor.getLastSystemMetrics();
+            }
+            
+            if (systemMetrics == null) {
+                return;
             }
 
             AdjustmentDecision decision = createAdjustmentDecision(poolMetrics, systemMetrics);

@@ -18,13 +18,8 @@ public class SystemMetricsCollector {
     private static final CentralProcessor processor = hal.getProcessor();
     private static final GlobalMemory memory = hal.getMemory();
     private static long[] prevTicks = processor.getSystemCpuLoadTicks();
-
-    // IO状态
-    private static long prevDiskRead = 0, prevDiskWrite = 0;
-    private static long prevNetRecv = 0, prevNetSent = 0;
-
+    
     public static SystemMetrics collect(long intervalMillis) throws InterruptedException {
-        long start = System.currentTimeMillis();
 
         // --- CPU ---
         long[] ticksBefore = processor.getSystemCpuLoadTicks();
@@ -54,35 +49,7 @@ public class SystemMetricsCollector {
         long availableMemory = memory.getAvailable();
         double memoryUsedPercent = 1.0 - ((double) availableMemory / totalMemory);
 
-        VirtualMemory vm = memory.getVirtualMemory();
-
-        // --- Disk ---
-        long diskRead = 0, diskWrite = 0;
-        for (HWDiskStore disk : hal.getDiskStores()) {
-            disk.updateAttributes();
-            diskRead += disk.getReadBytes();
-            diskWrite += disk.getWriteBytes();
-        }
-
-        // --- Network ---
-        long netRecv = 0, netSent = 0;
-        for (NetworkIF net : hal.getNetworkIFs()) {
-            net.updateAttributes();
-            netRecv += net.getBytesRecv();
-            netSent += net.getBytesSent();
-        }
-
-        long durationSec = Math.max(1, (System.currentTimeMillis() - start) / 1000);
-        long diskReadRate = (diskRead - prevDiskRead) / durationSec;
-        long diskWriteRate = (diskWrite - prevDiskWrite) / durationSec;
-        long netRecvRate = (netRecv - prevNetRecv) / durationSec;
-        long netSentRate = (netSent - prevNetSent) / durationSec;
-
-        prevDiskRead = diskRead;
-        prevDiskWrite = diskWrite;
-        prevNetRecv = netRecv;
-        prevNetSent = netSent;
-
+        
         // --- System Load ---
         double[] loadAverages = processor.getSystemLoadAverage(3);
         double systemLoadAverage = (loadAverages[0] >= 0) ? loadAverages[0] : 0.0;
@@ -100,11 +67,7 @@ public class SystemMetricsCollector {
         metrics.setMemoryTotal(totalMemory);
         metrics.setMemoryAvailable(availableMemory);
         metrics.setMemoryUsedPercent(memoryUsedPercent);
-
-        metrics.setDiskReadBytesPerSec(diskReadRate);
-        metrics.setDiskWriteBytesPerSec(diskWriteRate);
-        metrics.setNetRecvBytesPerSec(netRecvRate);
-        metrics.setNetSentBytesPerSec(netSentRate);
+        
         metrics.setTimestamp(LocalDateTime.now());
 
         return metrics;
