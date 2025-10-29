@@ -60,19 +60,5 @@ public class ThreadPoolConfig {
     private String adjustMode; // AUTO 0 / MANUAL 1 
 
     private long lastUpdateTime;
-
-
-    public enum Mode {
-
-        AUTO("auto",0),
-        MANUAL("manual",1);
-
-        public final String desc;
-        public final int code;
-
-        Mode(String desc, int  code) {
-            this.desc = desc;
-            this.code = code;
-        }
-    }
+    
 }

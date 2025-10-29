@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 尅可调节大小的队列
@@ -24,13 +25,16 @@ public class ResizableBlockingQueue<E> extends LinkedBlockingQueue<E> {
     /**
      * 容量更新
      */
-    public synchronized void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public synchronized void setCapacity(int newCapacity) {
+        if (newCapacity <= 0) {
+            throw new IllegalArgumentException("capacity must > 0");
+        }
+        this.capacity = newCapacity;
     }
 
     @Override
-    public int remainingCapacity() {
-        return capacity - size();
+    public synchronized int remainingCapacity() {
+        return Math.max(0, capacity - size());
     }
     
     @Override
@@ -39,5 +43,13 @@ public class ResizableBlockingQueue<E> extends LinkedBlockingQueue<E> {
             return false;
         }
         return super.offer(e);
+    }
+
+    @Override
+    public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
+        if (size() >= capacity) {
+            return false;
+        }
+        return super.offer(e, timeout, unit);
     }
 }

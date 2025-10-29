@@ -100,8 +100,6 @@ public class SystemMetricsCollector {
         metrics.setMemoryTotal(totalMemory);
         metrics.setMemoryAvailable(availableMemory);
         metrics.setMemoryUsedPercent(memoryUsedPercent);
-        metrics.setSwapTotal(vm.getSwapTotal());
-        metrics.setSwapUsed(vm.getSwapUsed());
 
         metrics.setDiskReadBytesPerSec(diskReadRate);
         metrics.setDiskWriteBytesPerSec(diskWriteRate);

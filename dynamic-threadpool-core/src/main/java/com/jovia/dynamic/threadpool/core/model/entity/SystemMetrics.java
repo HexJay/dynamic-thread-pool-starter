@@ -31,10 +31,6 @@ public class SystemMetrics {
     private long memoryAvailable;
     /** 内存使用率（0~1） */
     private double memoryUsedPercent;
-    /** 交换区总大小（字节） */
-    private long swapTotal;
-    /** 已使用交换区（字节） */
-    private long swapUsed;
     /** 磁盘每秒读写字节 */
     private long diskReadBytesPerSec;
     private long diskWriteBytesPerSec;

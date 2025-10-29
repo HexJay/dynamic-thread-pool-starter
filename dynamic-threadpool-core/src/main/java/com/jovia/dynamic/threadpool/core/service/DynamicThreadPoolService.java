@@ -6,6 +6,7 @@ import com.jovia.dynamic.threadpool.core.domain.pool.DynamicThreadPoolExecutor;
 import com.jovia.dynamic.threadpool.core.model.aggregate.ThreadPoolContext;
 import com.jovia.dynamic.threadpool.core.model.entity.ThreadPoolConfig;
 import com.jovia.dynamic.threadpool.core.model.entity.ThreadPoolMetrics;
+import com.jovia.dynamic.threadpool.core.model.vo.AdjustMode;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,7 +126,7 @@ public class DynamicThreadPoolService implements IDynamicThreadPoolService {
             ThreadPoolContext context = threadPoolContextMap.get(poolName);
             ThreadPoolConfig config = context.getThreadPoolConfig();
             
-            if (config == null || !Objects.equals(config.getAdjustMode(), ThreadPoolConfig.Mode.AUTO.desc)) {
+            if (config == null || !Objects.equals(config.getAdjustMode(), AdjustMode.MANUAL.desc)) {
                 continue;
             }
             
