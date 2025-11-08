@@ -39,6 +39,8 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
 
     // 新增调整控制字段
     private volatile long lastAdjustTime = 0;
+    // 是否曾发生过扩容（用于控制缩容前置条件）
+    private volatile boolean hasExpanded = false;
     
     private volatile int consecutiveOverloads = 0; // 连续过载次数
 
@@ -204,6 +206,10 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
     }
 
     public AdjustmentDecision checkForShrink(ThreadPoolMetrics pool, SystemMetrics sys) {
+        // 未发生过扩容，不允许缩容
+        if (!autoAdjustConfig.isAllowShrink() || !hasExpanded) {
+            return AdjustmentDecision.noChange("未发生扩容或未允许缩容");
+        }
         // --- Step 1: 系统空闲判断 ---
         if (sys != null && sys.getCpuUsage() < 0.3 && pool.getActiveCount() < pool.getCorePoolSize() * 0.3) {
             return createShrinkDecision(pool, "系统空闲，考虑缩减核心线程数");
@@ -316,6 +322,10 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
                 if (newQueue != null && ((ResizableBlockingQueue<?>) getQueue()).getCapacity() < newQueue) {
                     ((ResizableBlockingQueue<?>) getQueue()).setCapacity(newQueue);
                 }
+                // 标记已扩容（只要任何一个线程相关参数超过初始值）
+                if (getCorePoolSize() > initialCorePoolSize || getMaximumPoolSize() > initialMaxPoolSize) {
+                    hasExpanded = true;
+                }
                 break;
             case SHRINK_CORE:
                 if (newCore != null && getCorePoolSize() > newCore) {
@@ -326,6 +336,10 @@ public class DynamicThreadPoolExecutor extends ThreadPoolExecutor {
                 }
                 if (newQueue != null && ((ResizableBlockingQueue<?>) getQueue()).getCapacity() > newQueue) {
                     ((ResizableBlockingQueue<?>) getQueue()).setCapacity(newQueue);
+                }
+                // 若已回到不高于初始设定，则清除扩容标记，后续不再允许继续缩容
+                if (getCorePoolSize() <= initialCorePoolSize && getMaximumPoolSize() <= initialMaxPoolSize) {
+                    hasExpanded = false;
                 }
                 break;
             default:
