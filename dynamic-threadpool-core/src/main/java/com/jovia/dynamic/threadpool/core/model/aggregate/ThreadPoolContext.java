@@ -1,7 +1,7 @@
 package com.jovia.dynamic.threadpool.core.model.aggregate;
 
 import com.alibaba.fastjson2.annotation.JSONField;
-import com.jovia.dynamic.threadpool.core.domain.pool.DynamicThreadPoolExecutor;
+import com.jovia.dynamic.threadpool.core.domain.pool.AdaptiveThreadPoolExecutor;
 import com.jovia.dynamic.threadpool.core.model.entity.ThreadPoolConfig;
 import com.jovia.dynamic.threadpool.core.model.entity.ThreadPoolMetrics;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class ThreadPoolContext {
     private String threadPoolName;
     
     @JSONField(serialize = false)
-    private DynamicThreadPoolExecutor threadPoolExecutor;
+    private AdaptiveThreadPoolExecutor threadPoolExecutor;
     
     private ThreadPoolConfig threadPoolConfig;
     private ThreadPoolMetrics threadPoolMetrics;

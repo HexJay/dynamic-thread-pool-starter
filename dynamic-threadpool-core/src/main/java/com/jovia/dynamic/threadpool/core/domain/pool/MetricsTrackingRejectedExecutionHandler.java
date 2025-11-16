@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class MetricsTrackingRejectedExecutionHandler implements RejectedExecutionHandler {
 
+    private final double alpha = 0.3; // 平滑因子，可调
+    
     private final RejectedExecutionHandler delegate;
     private final AtomicLong rejectionCount = new AtomicLong(0);
 
@@ -26,9 +28,5 @@ public class MetricsTrackingRejectedExecutionHandler implements RejectedExecutio
 
     public long getRejectionCount() {
         return rejectionCount.get();
-    }
-
-    public void resetRejectionCount() {
-        rejectionCount.set(0);
     }
 }

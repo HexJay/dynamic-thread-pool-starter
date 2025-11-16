@@ -2,18 +2,16 @@ package com.jovia.dynamic.threadpool.core.service;
 
 
 import com.alibaba.fastjson2.JSON;
-import com.jovia.dynamic.threadpool.core.domain.pool.DynamicThreadPoolExecutor;
+import com.jovia.dynamic.threadpool.core.domain.pool.AdaptiveThreadPoolExecutor;
 import com.jovia.dynamic.threadpool.core.model.aggregate.ThreadPoolContext;
 import com.jovia.dynamic.threadpool.core.model.entity.ThreadPoolConfig;
 import com.jovia.dynamic.threadpool.core.model.entity.ThreadPoolMetrics;
-import com.jovia.dynamic.threadpool.core.model.vo.AdjustMode;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,18 +27,18 @@ public class DynamicThreadPoolService implements IDynamicThreadPoolService {
     private final Map<String, ThreadPoolContext> threadPoolContextMap;
     private final String appName;
 
-    public DynamicThreadPoolService(String appName, Map<String, DynamicThreadPoolExecutor> threadPoolMap) {
+    public DynamicThreadPoolService(String appName, Map<String, AdaptiveThreadPoolExecutor> threadPoolMap) {
         this.appName = appName;
         this.threadPoolContextMap = buildContext(threadPoolMap);
     }
 
-    private Map<String, ThreadPoolContext> buildContext(Map<String, DynamicThreadPoolExecutor> threadPoolMap) {
+    private Map<String, ThreadPoolContext> buildContext(Map<String, AdaptiveThreadPoolExecutor> threadPoolMap) {
         Map<String, ThreadPoolContext> threadPoolContextMap = new ConcurrentHashMap<>();
-        Set<Map.Entry<String, DynamicThreadPoolExecutor>> entries = threadPoolMap.entrySet();
+        Set<Map.Entry<String, AdaptiveThreadPoolExecutor>> entries = threadPoolMap.entrySet();
 
-        for (Map.Entry<String, DynamicThreadPoolExecutor> entry : entries) {
+        for (Map.Entry<String, AdaptiveThreadPoolExecutor> entry : entries) {
             String threadPoolName = entry.getKey();
-            DynamicThreadPoolExecutor threadPoolExecutor = entry.getValue();
+            AdaptiveThreadPoolExecutor threadPoolExecutor = entry.getValue();
 
             if (threadPoolExecutor == null) {
                 log.info("threadPool {} 不存在.", threadPoolName);
@@ -83,7 +81,7 @@ public class DynamicThreadPoolService implements IDynamicThreadPoolService {
     public void updateThreadPoolConfig(ThreadPoolConfig config) {
 
         ThreadPoolContext threadPoolContext = threadPoolContextMap.get(config.getThreadPoolName());
-        DynamicThreadPoolExecutor threadPoolExecutor = threadPoolContext.getThreadPoolExecutor();
+        AdaptiveThreadPoolExecutor threadPoolExecutor = threadPoolContext.getThreadPoolExecutor();
 
         if (threadPoolExecutor == null) {
             logger.warn("[动态线程池] 未找到线程池: {}", config.getThreadPoolName());
@@ -110,7 +108,7 @@ public class DynamicThreadPoolService implements IDynamicThreadPoolService {
         if (threadPoolContext == null) {
             return null;
         }
-        DynamicThreadPoolExecutor threadPoolExecutor = threadPoolContext.getThreadPoolExecutor();
+        AdaptiveThreadPoolExecutor threadPoolExecutor = threadPoolContext.getThreadPoolExecutor();
 
         ThreadPoolMetrics threadPoolMetrics = threadPoolExecutor.getThreadPoolMetrics();
         threadPoolMetrics.setPoolName(poolName);

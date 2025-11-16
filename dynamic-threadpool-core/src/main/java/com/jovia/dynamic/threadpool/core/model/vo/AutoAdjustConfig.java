@@ -34,9 +34,9 @@ public class AutoAdjustConfig {
 
     // 系统资源限制
     @Builder.Default
-    private double maxCpuUsage = 0.8; // 最大CPU使用率
+    private double maxCpuUsage = 0.75; // 最大CPU使用率
     @Builder.Default
-    private double maxMemoryUsage = 0.8; // 最大内存使用率
+    private double maxMemoryUsage = 0.75; // 最大内存使用率
 
     // 调整步长
     @Builder.Default

@@ -1,1 +1,1 @@
-com.jovia.dynamic.threadpool.core.config.DynamicThreadPoolAutoConfig
+com.jovia.dynamic.threadpool.core.config.AdaptiveThreadPoolAutoConfig

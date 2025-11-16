@@ -1,7 +1,7 @@
 package com.jovia.dynamic.threadpool.core.config;
 
 import com.alibaba.fastjson.JSON;
-import com.jovia.dynamic.threadpool.core.domain.pool.DynamicThreadPoolExecutor;
+import com.jovia.dynamic.threadpool.core.domain.pool.AdaptiveThreadPoolExecutor;
 import com.jovia.dynamic.threadpool.core.service.DynamicThreadPoolService;
 import com.jovia.dynamic.threadpool.core.service.IDynamicThreadPoolService;
 import com.jovia.dynamic.threadpool.core.utils.SystemMetricsMonitor;
@@ -28,22 +28,22 @@ import java.util.concurrent.ThreadPoolExecutor;
 @AutoConfiguration
 @EnableScheduling
 @ConditionalOnClass(ThreadPoolExecutor.class)
-@EnableConfigurationProperties(DynamicThreadPoolAutoConfigProperties.class)
-@ConditionalOnProperty(prefix = "dynamic.thread.pool", name = "enabled", havingValue = "true")
-public class DynamicThreadPoolAutoConfig {
+@EnableConfigurationProperties(AdaptiveThreadPoolProperties.class)
+@ConditionalOnProperty(prefix = "adaptive.thread.pool", name = "enabled", havingValue = "true")
+public class AdaptiveThreadPoolAutoConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(DynamicThreadPoolAutoConfig.class);
+    private static final Logger log = LoggerFactory.getLogger(AdaptiveThreadPoolAutoConfig.class);
 
     private final ApplicationContext applicationContext;
 
-    public DynamicThreadPoolAutoConfig(ApplicationContext applicationContext) {
+    public AdaptiveThreadPoolAutoConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         SystemMetricsMonitor.start(1000);
     }
 
     @Bean
     @ConditionalOnBean(ThreadPoolExecutor.class)
-    public IDynamicThreadPoolService dynamicThreadPoolService(Map<String, DynamicThreadPoolExecutor> threadPoolExecutorMap) {
+    public IDynamicThreadPoolService dynamicThreadPoolService(Map<String, AdaptiveThreadPoolExecutor> threadPoolExecutorMap) {
         String appName = applicationContext.getEnvironment().getProperty("spring.application.name");
         if (StringUtils.isBlank(appName)) {
             throw new IllegalStateException("[DynamicThreadPool] 启动失败：未配置 spring.application.name，请在 application.yml 中配置。");
